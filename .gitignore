@@ -1,0 +1,16 @@
+# виртуальное окружение и кэш Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# результаты отдельных прогонов (пересоздаются командой swarmcore run / serve)
+runs/
+
+# редактор и система
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
