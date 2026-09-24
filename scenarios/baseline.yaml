@@ -1,0 +1,36 @@
+# Базовая линия (docs/03, раздел 3): A = 1000×1000, однородная κ, λ = 0, идеальный канал.
+name: baseline
+t_end: 1800
+dt: 0.1
+
+world:
+  size: [1000, 1000]
+  cell_size: 25
+  prior: {kind: uniform}
+  targets: 30
+
+agents:
+  count: 10
+  motion: kinematic          # kinematic (MVP-0) | double_integrator (MVP-2)
+  v_cruise: 12
+  v_max: 15
+  a_max: 3
+  yaw_rate_max_deg: 90
+  altitude: 50
+  altitude_step: 3
+  altitude_layers: 10
+  home: [500, 0]
+  home_spacing: 15
+  battery_wh: 55
+  reserve: 0.2
+
+mission:
+  kind: lawnmower_grid
+  sector_size: 200
+  track_spacing: 20
+
+allocator: {kind: static_roundrobin}
+comms: {kind: ideal, range: 2000}
+faults: {kind: scheduled, scheduled: []}
+safety: {filter: none, min_separation: 5, vertical_separation: 3, strict: false}
+output: {record_every: 1.0, trajectories: true}

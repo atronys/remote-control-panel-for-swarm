@@ -1,0 +1,43 @@
+# Демонстрация: каждый прогон свой (swarmcore run без --seed берёт случайное зерно).
+# Отличается от baseline всем, что делает мир «живым»:
+#   • 3 «горячие» зоны целей в случайных местах → каждый раз другой план и порядок секторов;
+#   • ветер и порывы, разброс скорости дронов → разные траектории;
+#   • случайные тихие отказы (20 %) и разрыв связи со станцией 200–320 с;
+#   • гибрид B5 (станция + CBBA без станции), ORCA от столкновений.
+# Для экспериментов не использовать: там нужна воспроизводимость (scenarios/baseline.yaml).
+name: demo
+t_end: 1800
+dt: 0.1
+
+world:
+  size: [1000, 1000]
+  cell_size: 25
+  prior: {kind: hotspots, n: 3, sigma: 120, background: 0.15}
+  targets: 30
+
+agents:
+  count: 10
+  motion: kinematic
+  v_cruise: 12
+  v_max: 15
+  a_max: 3
+  yaw_rate_max_deg: 90
+  altitude: 50
+  altitude_step: 3
+  altitude_layers: 10
+  home: [500, 0]
+  home_spacing: 15
+  battery_wh: 55
+  reserve: 0.2
+
+mission:
+  kind: lawnmower_grid
+  sector_size: 200
+  track_spacing: 20
+
+allocator: {kind: hybrid}
+comms: {kind: network, range: 700, range_gcs: 1500, latency: 0.05, jitter: 0.03, loss: 0.1, gcs_outages: [[200, 320]]}
+faults: {kind: random, rate: 0.2, t_range: [60, 450], detect: silent}
+safety: {filter: orca, min_separation: 5, vertical_separation: 3, strict: false}
+realism: {enabled: true, wind_max: 3.0, gust_sigma: 0.8, gust_tau: 8.0, speed_spread: 0.05}
+output: {record_every: 1.0, trajectories: true}

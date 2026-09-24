@@ -1,0 +1,15 @@
+# MVP-1 демонстрация: отказ 20 % агентов. static_roundrobin задачи не перераспределяет —
+# это наивный базовый метод, с которым сравнивается динамическое распределение (R2).
+name: failures_20pct
+t_end: 1800
+dt: 0.1
+world: {size: [1000, 1000], cell_size: 25, prior: {kind: hotspots, n: 3, sigma: 120, background: 0.2}, targets: 30,
+        new_targets: [{t: 300, count: 5}]}
+agents: {count: 10, motion: double_integrator, v_cruise: 12, v_max: 15, a_max: 3, yaw_rate_max_deg: 90}
+mission: {kind: lawnmower_grid, sector_size: 200, track_spacing: 20}
+allocator: {kind: static_roundrobin}
+faults:
+  kind: scheduled
+  scheduled:
+    - {t: 120, agent: 3}
+    - {t: 240, agent: 7}
